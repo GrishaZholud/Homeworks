@@ -35,6 +35,9 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public void add(int index, T element) {
+        if(index < 0) {
+            throw new IndexOutOfBoundsException("Индекс не может быть отрицательным");
+        }
         if (index >= array.length - 1) {
             array = copyOf(array, array.length + index);
         }
@@ -47,8 +50,8 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public boolean add(T name) {
-        if (array.length == size) {
-            array = copyOf(array, array.length + 10);
+        if (array.length <= size) {
+            array = copyOf(array, array.length * 2);
         }
         array[size] = name;
         size++;
@@ -57,7 +60,10 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
-        if (size == 0) {
+        if(index < 0) {
+            throw new IndexOutOfBoundsException("Индекс не может быть отрицательным");
+        }
+        if (size <= 0) {
             return null;
         }
         T object = array[index];
@@ -104,11 +110,17 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public List subList(int fromIndex, int toIndex) {
+        if(toIndex - fromIndex <= 0) {
+            return null;
+        }
         T[] subArray = copyOfRange(array, fromIndex, toIndex);
         return new ArrayList<>(subArray);
     }
 
     public T[] copyOf(T[] original, int newLength) {
+        if(newLength < 0) {
+            return null;
+        }
         T[] array  =(T[]) new Object[newLength];
         for (int i = 0; i < original.length; i++) {
             array[i] = original[i];
@@ -117,6 +129,9 @@ public class ArrayList<T> implements List<T> {
     }
 
     public  T[] copyOfRange(T[] original, int from, int to) {
+        if(to - from <= 0) {
+            return null;
+        }
         T[] array = (T[]) new Object[to - from];
         for (int i = from; i < to; i++) {
             array[i] = original[i];
@@ -126,6 +141,9 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
+        if(index < 0) {
+            throw new IndexOutOfBoundsException("Индекс не может быть отрицательным");
+        }
         return array[index];
     }
     //region list methods
@@ -235,5 +253,6 @@ public class ArrayList<T> implements List<T> {
     public void forEach(Consumer action) {
         List.super.forEach(action);
     }
+
     //endregion
 }
